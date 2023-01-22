@@ -1,0 +1,16 @@
+.Home {
+    
+    &__container {
+        max-width: 1331px;
+        margin: 230px auto 328px;
+    }
+}
+
+// Куда его вынести
+.page__title {
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 54px;
+    color: #000000;
+    margin-bottom: 16px;
+}
