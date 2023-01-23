@@ -3,16 +3,14 @@
     height: 100%;
     border: 3px solid #F2F2F2;
 
-    &.Slider-format &__image-container {
-        // height: 441px;
-        position: relative;
-        padding: 0 0 109% 0;
-    }
-
     &__image-container {
-        // height: 362px;
         position: relative;
         padding: 0 0 108% 0;
+    }
+
+    &.Slider-format &__image-container {
+        position: relative;
+        padding: 0 0 107% 0;
     }
 
     &__image {
@@ -45,5 +43,4 @@
         color: #232323;
     }
 
- 
 }

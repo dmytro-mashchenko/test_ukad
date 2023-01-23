@@ -7,15 +7,15 @@ export function Header() {
   return (
     <div className="Header">
       <div className="Header__container container">
-        <NavLink to="/">
-          <img className="Header__logo" src={logo} alt="logo" />
+        <NavLink className="Header__logo" to="/">
+          <img src={logo} alt="logo" />
         </NavLink>
         <nav className="Header__navigation">
           <NavLink className="Header__link" to="/">
             Home
           </NavLink>
           <NavLink className="Header__link" to="/products">
-            Products
+            Dogs
           </NavLink>
         </nav>
       </div>

@@ -1,3 +1,8 @@
+.Slider__wrapper {
+    position: relative;
+    // padding: 0 20px;
+}
+
 .Slider {
     &__slide {
         height: auto;
@@ -6,6 +11,7 @@
 }
 .swiper-button-prev, 
 .swiper-button-next {
+    position: absolute;
     width: 68px;
     height: 68px;
     border-radius: 50%;

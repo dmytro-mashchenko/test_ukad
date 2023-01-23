@@ -18,7 +18,7 @@ export function Home() {
       const data = await getPosts();
       setLoading(false);
       if (!data.ok) {
-        throw new Error('Something went wrong');
+        throw new Error('There is an error on server side');
       }
       setList(await data.json());
     } catch (e) {
@@ -34,10 +34,10 @@ export function Home() {
   return (
     <div className="Home">
       <div className="Home__container container">
+        <h2 className="Home__title">Home page</h2>
         {isError && (
-          <ErrorMessage message="Something went wrong, please try later" />
+          <ErrorMessage message="Something went wrong, please try again later" />
         )}
-        <h2 className="Home__title page__title">Home page</h2>
         {loading && <Preloader />}
         {list && <Slider list={list} />}
       </div>
