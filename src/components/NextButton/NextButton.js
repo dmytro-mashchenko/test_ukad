@@ -7,7 +7,7 @@ export function NextButton() {
   return (
     <div className="NextButton next">
       <div className="NextButton__ellips">
-        <img className="NextButton__icon" src={arrow} alt="arrow" />
+        <img src={arrow} alt="arrow" />
       </div>
     </div>
   );

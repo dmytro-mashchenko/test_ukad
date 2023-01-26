@@ -33,7 +33,7 @@ export function Products() {
 
   return (
     <div className="Products">
-      <div className="Products__container container">
+      <div className="container">
         <h2 className="Products__title">Dogs</h2>
         {isError && (
           <ErrorMessage message="Something went wrong, please try again later" />
