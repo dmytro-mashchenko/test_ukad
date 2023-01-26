@@ -10,7 +10,7 @@ export function Header() {
         <NavLink className="Header__logo" to="/">
           <img src={logo} alt="logo" />
         </NavLink>
-        <nav className="Header__navigation">
+        <nav>
           <NavLink className="Header__link" to="/">
             Home
           </NavLink>

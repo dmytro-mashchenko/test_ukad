@@ -14,8 +14,8 @@ export function Card({ image, name, temperament, className, mode }) {
         <img className="Card__image" src={image.url} alt="fine_dog" />
       </div>
       <div className="Card__info-container">
-        <p className="Card__title">{name}</p>
-        <p className="Card__describe">{temperament}</p>
+        <h4 className="Card__sub-title">{name}</h4>
+        <h3 className="Card__title">{temperament}</h3>
       </div>
     </div>
   );

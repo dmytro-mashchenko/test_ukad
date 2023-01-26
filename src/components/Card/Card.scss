@@ -26,20 +26,20 @@
         padding: 28px;
     }
 
-    &__title {
-        font-weight: 700;
-        font-size: 19px;
-        line-height: 28px;
-        color: #232323;
-        margin-bottom: 8px;
-    }
-
-    &__describe {
+    &__sub-title {
         font-weight: 600;
         font-size: 13px;
         line-height: 20px;
         letter-spacing: -0.03em;
+        margin-bottom: 8px;
         text-transform: uppercase;
+        color: #232323;
+    }
+
+    &__title {
+        font-weight: 700;
+        font-size: 19px;
+        line-height: 28px;
         color: #232323;
     }
 

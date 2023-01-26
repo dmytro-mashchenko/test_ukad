@@ -6,7 +6,7 @@ import './Preloader.scss';
 export function Preloader() {
   return (
     <div className="Preloader">
-      <div className="Preloader__container container">
+      <div className="container">
         <img className="Preloader__gif" src={preloader} alt="preloader" />
       </div>
     </div>
