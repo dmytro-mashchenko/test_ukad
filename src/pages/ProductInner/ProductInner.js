@@ -9,7 +9,7 @@ import './ProductInner.scss';
 
 export function ProductInner() {
   const { id } = useParams();
-  const [product, setPdouct] = useState(null);
+  const [product, setPrdouct] = useState(null);
   const [productImageUrl, setPdouctImageUrl] = useState('');
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -21,9 +21,9 @@ export function ProductInner() {
         if (!res.ok) throw new Error();
         return res.json();
       })
-      .then((data) => setPdouct(data))
+      .then((data) => setPrdouct(data))
       .catch(() => setIsError(true));
-  }, [id]); // why id?
+  }, []);
 
   useEffect(() => {
     product &&
@@ -55,30 +55,30 @@ export function ProductInner() {
             </div>
             <div className="ProductInner__info-container">
               <h2 className="ProductInner__title">{product.name}</h2>
-              <p>
+              <h5 className="ProductInner__subtitle">
                 <span>Bred for: </span>
                 {product.bred_for.toLowerCase()}
-              </p>
-              <p>
+              </h5>
+              <h5 className="ProductInner__subtitle">
                 <span>Country origin: </span>
                 {product.origin ? product.origin : 'unknown'}
-              </p>
-              <p>
+              </h5>
+              <h5 className="ProductInner__subtitle">
                 <span>Height:</span>
                 {` ${product.height.metric} cm (${product.height.imperial} inch)`}
-              </p>
-              <p>
+              </h5>
+              <h5 className="ProductInner__subtitle">
                 <span>Weight:</span>
                 {` ${product.weight.metric} kg (${product.weight.imperial} lb)`}
-              </p>
-              <p>
+              </h5>
+              <h5 className="ProductInner__subtitle">
                 <span>Life span: </span>
                 {product.life_span}
-              </p>
-              <p>
+              </h5>
+              <h5 className="ProductInner__subtitle">
                 <span>Temperament: </span>
                 {product.temperament.toLowerCase()}
-              </p>
+              </h5>
             </div>
           </div>
         </div>
