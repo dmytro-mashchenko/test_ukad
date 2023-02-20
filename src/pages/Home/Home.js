@@ -35,9 +35,7 @@ export function Home() {
     <div className="Home">
       <div className="Home__container container">
         <h2 className="Home__title">Home page</h2>
-        {isError && (
-          <ErrorMessage message="Something went wrong, please try again later" />
-        )}
+        {isError && <ErrorMessage />}
         {loading && <Preloader />}
         {list && <Slider list={list} />}
       </div>

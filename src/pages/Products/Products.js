@@ -18,7 +18,7 @@ export function Products() {
       const data = await getPosts();
       setLoading(false);
       if (!data.ok) {
-        throw new Error('There is an error on server side');
+        throw new Error('There is an error');
       }
       setProducts(await data.json());
     } catch (e) {
@@ -35,9 +35,7 @@ export function Products() {
     <div className="Products">
       <div className="container">
         <h2 className="Products__title">Dogs</h2>
-        {isError && (
-          <ErrorMessage message="Something went wrong, please try again later" />
-        )}
+        {isError && <ErrorMessage />}
         {loading && <Preloader />}
         <div className="Products__catalog">
           {products &&
