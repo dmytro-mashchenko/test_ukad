@@ -10,7 +10,7 @@ import './ProductInner.scss';
 
 export function ProductInner() {
   const { id } = useParams();
-  const [product, setPrdouct] = useState(null);
+  const [product, setProduct] = useState(null);
   const [productImageUrl, setPdouctImageUrl] = useState('');
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -18,7 +18,7 @@ export function ProductInner() {
   async function loadProductDetails() {
     try {
       const data = await getProductDetails(id);
-      setPrdouct(data);
+      setProduct(data);
     } catch {
       setIsError(true);
     } finally {
