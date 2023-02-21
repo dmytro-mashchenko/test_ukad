@@ -13,17 +13,13 @@ export function Home() {
   const [isError, setIsError] = useState(false);
 
   async function loadPosts() {
-    setIsError(false);
     try {
       const data = await getPosts();
-      setLoading(false);
-      if (!data.ok) {
-        throw new Error('There is an error on server side');
-      }
-      setList(await data.json());
-    } catch (e) {
+      setList(data);
+    } catch {
       setIsError(true);
-      console.log(e.message);
+    } finally {
+      setLoading(false);
     }
   }
 

@@ -11,19 +11,17 @@ export function Card({ image, name, temperament, className, mode, id }) {
   });
 
   return (
-    <div className={cn('Card', cardMode, className)}>
-      <div className="Card__image-container">
-        <Link to={`/products/${id}`}>
+    <Link to={`/products/${id}`}>
+      <div className={cn('Card', cardMode, className)}>
+        <div className="Card__image-container">
           <img className="Card__image" src={image.url} alt="fine_dog" />
-        </Link>
+        </div>
+        <div className="Card__info-container">
+          <h4 className="Card__sub-title">{name}</h4>
+          <h3 className="Card__title">{temperament}</h3>
+        </div>
       </div>
-      <div className="Card__info-container">
-        <h4 className="Card__sub-title">{name}</h4>
-        <h3 className="Card__title">
-          <Link to={`/products/${id}`}>{temperament}</Link>
-        </h3>
-      </div>
-    </div>
+    </Link>
   );
 }
 
