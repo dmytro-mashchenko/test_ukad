@@ -1,0 +1,67 @@
+.Pagination {
+    &__container {
+        display: flex;
+        align-self: center;
+
+    }
+
+    &__page {
+        list-style: none;
+        border-radius: 3px;
+        transition: 0.2s;
+
+        &:hover {
+            background-color: #022b3228;
+        }
+
+        &.selected {
+            border: 1px solid #022B32;
+        }
+    }
+
+    &__page-link {
+        padding: 0 10px;
+        cursor: pointer;
+    }
+
+    &__break {
+        list-style: none;
+        border-radius: 3px;
+
+        &:hover {
+            background-color: #022b3228;
+        }
+    }
+
+    &__break-link {
+        padding: 0 10px;
+        cursor: pointer;
+    }
+
+    &__previous, &__next {
+        list-style: none;
+        margin-right: 20px;
+        border: 1px solid #022B32;
+        border-radius: 3px;
+        transition: 0.2s;
+
+        &:hover {
+            background-color: #022b3228;
+        }
+
+        &.disabled {
+            pointer-events: none;
+            color: #022b3226;
+            border-color: #022b3226;
+        }
+    }
+
+    &__next {
+        margin-left: 20px;
+    }
+
+    &__previous-link, &__next-link {
+        padding: 0 20px;
+        cursor: pointer;
+    }
+}

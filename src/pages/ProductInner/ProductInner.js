@@ -74,11 +74,13 @@ export function ProductInner() {
                 <h2 className="ProductInner__title">{product.name}</h2>
                 <h5 className="ProductInner__subtitle">
                   <b>Bred for: </b>
-                  {product.bred_for.toLowerCase()}
+                  {product.bred_for
+                    ? product.bred_for.toLowerCase()
+                    : ' unknown'}
                 </h5>
                 <h5 className="ProductInner__subtitle">
                   <b>Country origin:</b>
-                  {product.origin ? product.origin : 'unknown'}
+                  {product.origin ? product.origin : ' unknown'}
                 </h5>
                 <h5 className="ProductInner__subtitle">
                   <b>Height:</b>
@@ -94,7 +96,9 @@ export function ProductInner() {
                 </h5>
                 <h5 className="ProductInner__subtitle">
                   <b>Temperament: </b>
-                  {product.temperament.toLowerCase()}
+                  {product.temperament
+                    ? product.temperament.toLowerCase()
+                    : ' unknown'}
                 </h5>
               </>
             )}
