@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Card } from '../../components/Card/Card';
+import { useSearchParams } from 'react-router-dom';
 
+import { Card } from '../../components/Card/Card';
 import { ErrorMessage } from '../../components/ErrorMesage/ErrorMessage';
 import { Pagination } from '../../components/Pagination/Pagination';
 import { Preloader } from '../../components/Preloader/Preloader';
@@ -12,14 +13,17 @@ export function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(
+    Number(searchParams.get('page')) || 1
+  );
   const showPageCount = 10;
 
   async function loadPosts() {
     try {
       setLoading(true);
       setProducts([]);
-      const data = await getPosts(showPageCount, currentPage);
+      const data = await getPosts(showPageCount, currentPage - 1);
       setProducts(data);
     } catch {
       setIsError(true);
@@ -29,12 +33,10 @@ export function Products() {
   }
 
   useEffect(() => {
+    searchParams.set('page', currentPage);
+    setSearchParams(searchParams);
     loadPosts();
   }, [currentPage]);
-
-  const onPageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
 
   return (
     <div className="Products">
@@ -50,7 +52,7 @@ export function Products() {
               </div>
             ))}
         </div>
-        <Pagination onPageChange={onPageChange} />
+        <Pagination onPageChange={setCurrentPage} currentPage={currentPage} />
       </div>
     </div>
   );
