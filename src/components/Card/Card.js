@@ -18,7 +18,9 @@ export function Card({ image, name, temperament, className, mode, id }) {
         </div>
         <div className="Card__info-container">
           <h4 className="Card__sub-title">{name}</h4>
-          <h3 className="Card__title">{temperament}</h3>
+          <h3 className="Card__title">
+            {temperament ? temperament : 'This information is in progress'}
+          </h3>
         </div>
       </div>
     </Link>
@@ -28,7 +30,7 @@ export function Card({ image, name, temperament, className, mode, id }) {
 Card.propTypes = {
   image: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
-  temperament: PropTypes.string.isRequired,
+  temperament: PropTypes.string,
   className: PropTypes.string,
   mode: PropTypes.oneOf(['default', 'primary']),
   id: PropTypes.number.isRequired,
