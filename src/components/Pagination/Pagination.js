@@ -1,23 +1,35 @@
-import ReactPaginate from 'react-paginate';
-import PropTypes from 'prop-types';
+import ReactPaginate from "react-paginate";
+import PropTypes from "prop-types";
+import { Icon } from "../../assets/icons/icons";
+import { setPageNumbers } from "../../services/functions";
 
-import './Pagination.scss';
+import "./Pagination.scss";
 
-export function Pagination({ onPageChange, currentPage }) {
+export function Pagination({
+  onPageChange,
+  currentPage,
+  totalProducts,
+  productsPerPage,
+}) {
+  const pageNumbers = totalProducts
+    ? setPageNumbers(totalProducts, productsPerPage)
+    : [];
+
   return (
     <ReactPaginate
       breakLabel="..."
-      nextLabel=">"
-      previousLabel="<"
+      nextLabel={<Icon icon="chevron-right" size={35} color={"#757575"} />}
+      previousLabel={<Icon icon="chevron-right" size={35} color={"#757575"} />}
       onPageChange={(e) => onPageChange(e.selected + 1)}
-      pageRangeDisplayed={5}
-      pageCount={17}
+      pageRangeDisplayed={3}
+      pageCount={pageNumbers.length ? pageNumbers.length : 17}
       renderOnZeroPageCount={null}
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       forcePage={currentPage - 1}
       containerClassName="Pagination__container"
       pageClassName="Pagination__page"
       pageLinkClassName="Pagination__page-link"
+      activeLinkClassName="active"
       breakClassName="Pagination__break"
       breakLinkClassName="Pagination__break-link"
       previousClassName="Pagination__previous"
@@ -31,4 +43,6 @@ export function Pagination({ onPageChange, currentPage }) {
 Pagination.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   currentPage: PropTypes.number.isRequired,
+  totalProducts: PropTypes.number,
+  productsPerPage: PropTypes.number,
 };
