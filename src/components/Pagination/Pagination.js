@@ -13,7 +13,7 @@ export function Pagination({
 }) {
   const pageNumbers = totalProducts
     ? setPageNumbers(totalProducts, productsPerPage)
-    : [];
+    : 17;
 
   return (
     <ReactPaginate
@@ -22,7 +22,7 @@ export function Pagination({
       previousLabel={<Icon icon="chevron-right" size={35} color={"#757575"} />}
       onPageChange={(e) => onPageChange(e.selected + 1)}
       pageRangeDisplayed={3}
-      pageCount={pageNumbers.length ? pageNumbers.length : 17}
+      pageCount={pageNumbers}
       renderOnZeroPageCount={null}
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       forcePage={currentPage - 1}

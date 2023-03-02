@@ -1,4 +1,4 @@
-export async function getPosts(limit = 8, page = 0) {
+export async function getProducts(limit = 8, page = 0) {
   const response = await fetch(
     `https://api.thedogapi.com/v1/breeds?limit=${limit}&page=${page}`
   );
@@ -29,7 +29,7 @@ export async function getProductsByFilter(value) {
 }
 
 export async function filterCompareData(array) {
-  const response = await getPosts(170);
+  const response = await getProducts(170);
   const idsForCompare = array.map((item) => item.id);
   const comparedData = response.filter((item) =>
     idsForCompare.includes(item.id)

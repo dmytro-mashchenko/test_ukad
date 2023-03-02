@@ -12,7 +12,7 @@ import "./SearchField.scss";
 
 export function SearchField({ instant }) {
   const [value, setValue] = useState("");
-  const [isError, setIsError] = useState(false);
+  const [setIsError] = useState(false);
   const navigate = useNavigate();
   const { setProductsFromContext } = useContext(ProductsContext);
   const [isFirstMount, setIsFirstMount] = useState(false);

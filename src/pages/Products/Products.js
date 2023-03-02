@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
-import PropTypes from "prop-types";
 
 import { Card } from "../../components/Card/Card";
 import { ErrorMessage } from "../../components/ErrorMesage/ErrorMessage";
 import { Pagination } from "../../components/Pagination/Pagination";
 import { Preloader } from "../../components/Preloader/Preloader";
 import { SearchField } from "../../components/SearchField/SearchField";
-import { getPosts } from "../../services/ajax";
+import { getProducts } from "../../services/ajax";
 import { filterCompareData } from "../../services/ajax";
-import { sliceArray } from "../../services/functions";
+import { getVisiblePages } from "../../services/functions";
+import { ProductsContext } from "../../App";
 
 import "./Products.scss";
 
-export function Products({ productsFromContext }) {
+export function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -22,15 +22,16 @@ export function Products({ productsFromContext }) {
     Number(searchParams.get("page")) || 1
   );
   const [isInstant] = useState(true);
-  const showPageCount = 10;
+  const ProductsPerPage = 10;
   const [filteredCurrentPage, setFilteredCurrentPage] = useState(1);
   const [totalFilteredProducts, setTotalFilteredProducts] = useState(0);
+  const { productsFromContext } = useContext(ProductsContext);
 
-  async function loadPosts() {
+  async function loadProducts() {
     try {
       setLoading(true);
       setProducts([]);
-      const data = await getPosts(showPageCount, currentPage - 1);
+      const data = await getProducts(ProductsPerPage, currentPage - 1);
       setProducts(data);
     } catch {
       setIsError(true);
@@ -43,7 +44,9 @@ export function Products({ productsFromContext }) {
     try {
       const filteredData = await filterCompareData(productsFromContext);
       setTotalFilteredProducts(filteredData.length);
-      setProducts(sliceArray(filteredData, showPageCount, filteredCurrentPage));
+      setProducts(
+        getVisiblePages(filteredData, ProductsPerPage, filteredCurrentPage)
+      );
     } catch {
       setIsError(true);
     } finally {
@@ -53,20 +56,27 @@ export function Products({ productsFromContext }) {
 
   useEffect(() => {
     setLoading(true);
+    searchParams.delete("search");
     searchParams.set("page", currentPage);
     setSearchParams(searchParams);
-    loadPosts();
+    loadProducts();
   }, [currentPage]);
 
   useEffect(() => {
     if (!productsFromContext) return;
     if (productsFromContext.length) {
       loadFilteredPosts();
-      searchParams.set("page", filteredCurrentPage);
+      searchParams.delete("page");
+      searchParams.set("search", filteredCurrentPage);
       setSearchParams(searchParams);
       return;
     }
-    if (products.length) loadPosts();
+    if (products.length) {
+      searchParams.delete("search");
+      searchParams.set("page", currentPage);
+      setSearchParams(searchParams);
+      loadProducts();
+    }
   }, [productsFromContext, filteredCurrentPage]);
 
   return (
@@ -98,7 +108,7 @@ export function Products({ productsFromContext }) {
               onPageChange={setFilteredCurrentPage}
               currentPage={filteredCurrentPage}
               totalProducts={totalFilteredProducts}
-              productsPerPage={showPageCount}
+              productsPerPage={ProductsPerPage}
             />
           )
         )}
@@ -106,7 +116,3 @@ export function Products({ productsFromContext }) {
     </div>
   );
 }
-
-Products.propTypes = {
-  productsFromContext: PropTypes.array,
-};
