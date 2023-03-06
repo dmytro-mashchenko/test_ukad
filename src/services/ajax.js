@@ -28,10 +28,10 @@ export async function getProductsByFilter(value) {
   return response.json();
 }
 
-export async function filterCompareData(array) {
-  const response = await getProducts(170);
-  const idsForCompare = array.map((item) => item.id);
-  const comparedData = response.filter((item) =>
+export async function CompareWithAllData(arrayForCompare) {
+  const allData = await getProducts(170);
+  const idsForCompare = arrayForCompare.map((item) => item.id);
+  const comparedData = allData.filter((item) =>
     idsForCompare.includes(item.id)
   );
   return comparedData;

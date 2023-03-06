@@ -12,3 +12,12 @@ export function setPageNumbers(totalItems, itemsPerPage) {
   }
   return pageNumbers.length;
 }
+
+export function setPageSearchParams(
+  searchParams,
+  setSearchParams,
+  currentPage
+) {
+  searchParams.set("page", currentPage);
+  setSearchParams(searchParams);
+}

@@ -7,9 +7,10 @@ import { Pagination } from "../../components/Pagination/Pagination";
 import { Preloader } from "../../components/Preloader/Preloader";
 import { SearchField } from "../../components/SearchField/SearchField";
 import { getProducts } from "../../services/ajax";
-import { filterCompareData } from "../../services/ajax";
+import { CompareWithAllData } from "../../services/ajax";
 import { getVisiblePages } from "../../services/functions";
 import { ProductsContext } from "../../App";
+import { setPageSearchParams } from "../../services/functions";
 
 import "./Products.scss";
 
@@ -17,13 +18,16 @@ export function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(
     Number(searchParams.get("page")) || 1
   );
+  const [filteredCurrentPage, setFilteredCurrentPage] = useState(
+    Number(searchParams.get("page")) || 1
+  );
   const [isInstant] = useState(true);
-  const ProductsPerPage = 10;
-  const [filteredCurrentPage, setFilteredCurrentPage] = useState(1);
+  const productsPerPage = 10;
   const [totalFilteredProducts, setTotalFilteredProducts] = useState(0);
   const { productsFromContext } = useContext(ProductsContext);
 
@@ -31,7 +35,7 @@ export function Products() {
     try {
       setLoading(true);
       setProducts([]);
-      const data = await getProducts(ProductsPerPage, currentPage - 1);
+      const data = await getProducts(productsPerPage, currentPage - 1);
       setProducts(data);
     } catch {
       setIsError(true);
@@ -40,12 +44,12 @@ export function Products() {
     }
   }
 
-  async function loadFilteredPosts() {
+  async function loadFilteredProducts() {
     try {
-      const filteredData = await filterCompareData(productsFromContext);
+      const filteredData = await CompareWithAllData(productsFromContext);
       setTotalFilteredProducts(filteredData.length);
       setProducts(
-        getVisiblePages(filteredData, ProductsPerPage, filteredCurrentPage)
+        getVisiblePages(filteredData, productsPerPage, filteredCurrentPage)
       );
     } catch {
       setIsError(true);
@@ -55,26 +59,28 @@ export function Products() {
   }
 
   useEffect(() => {
+    if (searchParams.get("search")) return;
     setLoading(true);
-    searchParams.delete("search");
-    searchParams.set("page", currentPage);
-    setSearchParams(searchParams);
+    setPageSearchParams(searchParams, setSearchParams, currentPage);
     loadProducts();
+    setFilteredCurrentPage(1);
   }, [currentPage]);
 
   useEffect(() => {
-    if (!productsFromContext) return;
+    if (!productsFromContext) {
+      setLoading(false);
+      return;
+    }
     if (productsFromContext.length) {
-      loadFilteredPosts();
-      searchParams.delete("page");
-      searchParams.set("search", filteredCurrentPage);
-      setSearchParams(searchParams);
+      setPageSearchParams(searchParams, setSearchParams, filteredCurrentPage);
+      loadFilteredProducts();
+      setCurrentPage(1);
       return;
     }
     if (products.length) {
+      setLoading(false);
       searchParams.delete("search");
-      searchParams.set("page", currentPage);
-      setSearchParams(searchParams);
+      setPageSearchParams(searchParams, setSearchParams, currentPage);
       loadProducts();
     }
   }, [productsFromContext, filteredCurrentPage]);
@@ -108,7 +114,7 @@ export function Products() {
               onPageChange={setFilteredCurrentPage}
               currentPage={filteredCurrentPage}
               totalProducts={totalFilteredProducts}
-              productsPerPage={ProductsPerPage}
+              productsPerPage={productsPerPage}
             />
           )
         )}
