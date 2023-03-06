@@ -1,7 +1,7 @@
-import React from 'react';
-import arrow from '../../assets/img/Arrow.png';
+import React from "react";
+import arrow from "../../assets/img/Arrow.png";
 
-import './PrevButton.scss';
+import "./PrevButton.scss";
 
 export function PrevButton() {
   return (
