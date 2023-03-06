@@ -7,6 +7,8 @@ import { Pagination } from "../../components/Pagination/Pagination";
 import { Preloader } from "../../components/Preloader/Preloader";
 import { getPosts } from "../../services/ajax";
 import { SearchField } from "../../components/SearchField/SearchField";
+import { getProductsByFilter } from "../../services/ajax";
+import { getVisiblePages } from "../../services/functions";
 
 import "./Products.scss";
 
@@ -18,13 +20,18 @@ export function Products() {
   const [currentPage, setCurrentPage] = useState(
     Number(searchParams.get("page")) || 1
   );
-  const showPageCount = 10;
+  const [filteredCurrentPage, setFilteredCurrentPage] = useState(
+    Number(searchParams.get("page")) || 1
+  );
+  const productsPerPage = 10;
+  const queryValue = searchParams.get("search");
+  const [totalFilteredProducts, setTotalFilteredProducts] = useState(0);
 
   async function loadPosts() {
     try {
       setLoading(true);
       setProducts([]);
-      const data = await getPosts(showPageCount, currentPage - 1);
+      const data = await getPosts(productsPerPage, currentPage - 1);
       setProducts(data);
     } catch {
       setIsError(true);
@@ -33,11 +40,31 @@ export function Products() {
     }
   }
 
+  async function loadFilteredProducts() {
+    try {
+      const data = await getProductsByFilter(queryValue);
+      setTotalFilteredProducts(data.length);
+      setProducts(getVisiblePages(data, productsPerPage, filteredCurrentPage));
+    } catch {
+      setIsError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
-    searchParams.set("page", currentPage);
-    setSearchParams(searchParams);
-    loadPosts();
-  }, [currentPage]);
+    if (!queryValue) {
+      searchParams.set("page", currentPage);
+      setSearchParams(searchParams);
+      loadPosts();
+      return;
+    }
+    if (queryValue) {
+      searchParams.set("page", filteredCurrentPage);
+      setSearchParams(searchParams);
+      loadFilteredProducts();
+    }
+  }, [currentPage, filteredCurrentPage]);
 
   return (
     <div className="Products">
@@ -56,7 +83,16 @@ export function Products() {
               </div>
             ))}
         </div>
-        <Pagination onPageChange={setCurrentPage} currentPage={currentPage} />
+        {!queryValue ? (
+          <Pagination onPageChange={setCurrentPage} currentPage={currentPage} />
+        ) : (
+          <Pagination
+            onPageChange={setFilteredCurrentPage}
+            currentPage={filteredCurrentPage}
+            productsPerPage={productsPerPage}
+            totalProducts={totalFilteredProducts}
+          />
+        )}
       </div>
     </div>
   );

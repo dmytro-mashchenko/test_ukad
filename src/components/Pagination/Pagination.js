@@ -1,10 +1,20 @@
 import ReactPaginate from "react-paginate";
 import PropTypes from "prop-types";
 import { Icon } from "../../assets/icons/icons";
+import { setPageNumbers } from "../../services/functions";
 
 import "./Pagination.scss";
 
-export function Pagination({ onPageChange, currentPage }) {
+export function Pagination({
+  onPageChange,
+  currentPage,
+  productsPerPage,
+  totalProducts,
+}) {
+  const pageNumbers = totalProducts
+    ? setPageNumbers(totalProducts, productsPerPage)
+    : 17;
+
   return (
     <ReactPaginate
       breakLabel="..."
@@ -12,7 +22,7 @@ export function Pagination({ onPageChange, currentPage }) {
       previousLabel={<Icon icon="chevron-right" size={35} color={"#757575"} />}
       onPageChange={(e) => onPageChange(e.selected + 1)}
       pageRangeDisplayed={3}
-      pageCount={17}
+      pageCount={pageNumbers}
       renderOnZeroPageCount={null}
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       forcePage={currentPage - 1}
