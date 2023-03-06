@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
-import { Card } from '../../components/Card/Card';
-import { ErrorMessage } from '../../components/ErrorMesage/ErrorMessage';
-import { Pagination } from '../../components/Pagination/Pagination';
-import { Preloader } from '../../components/Preloader/Preloader';
-import { getPosts } from '../../services/ajax';
+import { Card } from "../../components/Card/Card";
+import { ErrorMessage } from "../../components/ErrorMesage/ErrorMessage";
+import { Pagination } from "../../components/Pagination/Pagination";
+import { Preloader } from "../../components/Preloader/Preloader";
+import { getPosts } from "../../services/ajax";
+import { SearchField } from "../../components/SearchField/SearchField";
 
-import './Products.scss';
+import "./Products.scss";
 
 export function Products() {
   const [products, setProducts] = useState([]);
@@ -15,7 +16,7 @@ export function Products() {
   const [isError, setIsError] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(
-    Number(searchParams.get('page')) || 1
+    Number(searchParams.get("page")) || 1
   );
   const showPageCount = 10;
 
@@ -33,7 +34,7 @@ export function Products() {
   }
 
   useEffect(() => {
-    searchParams.set('page', currentPage);
+    searchParams.set("page", currentPage);
     setSearchParams(searchParams);
     loadPosts();
   }, [currentPage]);
@@ -41,7 +42,10 @@ export function Products() {
   return (
     <div className="Products">
       <div className="Products__container container">
-        <h2 className="Products__title">Dogs</h2>
+        <div className="Products__top-row">
+          <h2 className="Products__title">Dogs</h2>
+          <SearchField changeProducts={setProducts} />
+        </div>
         {isError && <ErrorMessage />}
         {loading && <Preloader />}
         <div className="Products__catalog">

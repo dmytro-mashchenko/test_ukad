@@ -1,7 +1,9 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import logo from '../../assets/img/UKAD_logo.png';
-import './Header.scss';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import logo from "../../assets/img/UKAD_logo.png";
+import { SearchField } from "../SearchField/SearchField";
+
+import "./Header.scss";
 
 export function Header() {
   return (
@@ -18,6 +20,7 @@ export function Header() {
             Dogs
           </NavLink>
         </nav>
+        <SearchField />
       </div>
     </div>
   );
