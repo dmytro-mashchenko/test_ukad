@@ -12,3 +12,19 @@ export function setPageNumbers(totalItems, itemsPerPage) {
   }
   return pageNumbers.length;
 }
+
+// const handleChange = (e) => {
+//   setValue((actualValue) => {
+//     actualValue = e.target.value.trim();
+//     if (!changeProducts) return actualValue;
+//     // searchParams.set("search", actualValue);
+//     // setSearchParams(searchParams);
+//     if (!actualValue) {
+//       changeProducts(actualValue);
+//       debouncedChangeProducts.cancel();
+//       return actualValue;
+//     }
+//     debouncedChangeProducts();
+//     return actualValue;
+//   });
+// };

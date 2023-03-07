@@ -24,7 +24,9 @@ export function Products() {
     Number(searchParams.get("page")) || 1
   );
   const productsPerPage = 10;
-  const [queryValue, setQueryValue] = useState(searchParams.get("search"));
+  const [queryValue, setQueryValue] = useState(
+    searchParams.get("search") || ""
+  );
   const [totalFilteredProducts, setTotalFilteredProducts] = useState(0);
 
   async function loadPosts() {
@@ -54,7 +56,7 @@ export function Products() {
 
   useEffect(() => {
     if (!queryValue) {
-      console.log("triggered");
+      searchParams.delete("search");
       searchParams.set("page", currentPage);
       setSearchParams(searchParams);
       loadPosts();
