@@ -54,6 +54,7 @@ export function Products() {
 
   useEffect(() => {
     if (!queryValue) {
+      console.log("triggered");
       searchParams.set("page", currentPage);
       setSearchParams(searchParams);
       loadPosts();

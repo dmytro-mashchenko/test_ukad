@@ -1,6 +1,8 @@
 import { Icon } from "../../assets/icons/icons";
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useDebounce } from "../../services/hooks";
+import debounce from "lodash.debounce";
 
 import "./SearchField.scss";
 
@@ -11,13 +13,22 @@ export function SearchField({ changeProducts }) {
   const PATH = window.location.pathname;
   const PRODUCTS_PATH = PATH === "/products";
 
+  const debouncedChangeProducts = useDebounce(() => {
+    changeProducts(value);
+  });
+
   const handleChange = (e) => {
     setValue((actualValue) => {
       actualValue = e.target.value.trim();
       if (!changeProducts) return actualValue;
       searchParams.set("search", actualValue);
       setSearchParams(searchParams);
-      changeProducts(actualValue);
+      if (!actualValue) {
+        changeProducts(actualValue);
+        debouncedChangeProducts.cancel();
+        return;
+      }
+      debouncedChangeProducts();
       return actualValue;
     });
   };
