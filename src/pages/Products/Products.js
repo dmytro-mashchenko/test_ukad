@@ -73,6 +73,9 @@ export function Products() {
           <h2 className="Products__title">Dogs</h2>
           <SearchField changeProducts={setQueryValue} />
         </div>
+        {queryValue && !products.length && (
+          <ErrorMessage message="There are no dogs with this breed" />
+        )}
         {isError && <ErrorMessage />}
         {loading && <Preloader />}
         <div className="Products__catalog">
@@ -83,9 +86,10 @@ export function Products() {
               </div>
             ))}
         </div>
-        {!queryValue ? (
+        {!queryValue && (
           <Pagination onPageChange={setCurrentPage} currentPage={currentPage} />
-        ) : (
+        )}
+        {queryValue && !!products.length && (
           <Pagination
             onPageChange={setFilteredCurrentPage}
             currentPage={filteredCurrentPage}
