@@ -24,7 +24,7 @@ export function Products() {
     Number(searchParams.get("page")) || 1
   );
   const productsPerPage = 10;
-  const queryValue = searchParams.get("search");
+  const [queryValue, setQueryValue] = useState(searchParams.get("search"));
   const [totalFilteredProducts, setTotalFilteredProducts] = useState(0);
 
   async function loadPosts() {
@@ -64,14 +64,14 @@ export function Products() {
       setSearchParams(searchParams);
       loadFilteredProducts();
     }
-  }, [currentPage, filteredCurrentPage]);
+  }, [currentPage, filteredCurrentPage, queryValue]);
 
   return (
     <div className="Products">
       <div className="Products__container container">
         <div className="Products__top-row">
           <h2 className="Products__title">Dogs</h2>
-          <SearchField changeProducts={setProducts} />
+          <SearchField changeProducts={setQueryValue} />
         </div>
         {isError && <ErrorMessage />}
         {loading && <Preloader />}

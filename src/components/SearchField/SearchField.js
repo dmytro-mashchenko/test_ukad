@@ -12,7 +12,14 @@ export function SearchField({ changeProducts }) {
   const PRODUCTS_PATH = PATH === "/products";
 
   const handleChange = (e) => {
-    setValue(e.target.value.trim());
+    setValue((actualValue) => {
+      actualValue = e.target.value.trim();
+      if (!changeProducts) return actualValue;
+      searchParams.set("search", actualValue);
+      setSearchParams(searchParams);
+      changeProducts(actualValue);
+      return actualValue;
+    });
   };
 
   const onSubmitHandler = (e) => {
