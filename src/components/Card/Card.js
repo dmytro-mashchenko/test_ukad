@@ -1,11 +1,10 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import cn from "class-names";
+
 import placeHolderImage from "../../assets/img/placeholder.jpg";
 
 import "./Card.scss";
-
-import PropTypes from "prop-types";
-import cn from "class-names";
 
 export function Card({ image, name, temperament, className, mode, id }) {
   const cardMode = cn({

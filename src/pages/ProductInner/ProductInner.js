@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { getProductDetails, getProductImage } from '../../services/ajax';
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import { Preloader } from '../../components/Preloader/Preloader';
-import { ErrorMessage } from '../../components/ErrorMesage/ErrorMessage';
+import { getProductDetails, getProductImage } from "../../services/ajax";
+import { Preloader } from "../../components/Preloader/Preloader";
+import { ErrorMessage } from "../../components/ErrorMesage/ErrorMessage";
 
-import './ProductInner.scss';
+import "./ProductInner.scss";
 
 export function ProductInner() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [productImageUrl, setPdouctImageUrl] = useState('');
+  const [productImageUrl, setPdouctImageUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
@@ -76,11 +76,11 @@ export function ProductInner() {
                   <b>Bred for: </b>
                   {product.bred_for
                     ? product.bred_for.toLowerCase()
-                    : ' unknown'}
+                    : " unknown"}
                 </h5>
                 <h5 className="ProductInner__subtitle">
                   <b>Country origin:</b>
-                  {product.origin ? product.origin : ' unknown'}
+                  {product.origin ? product.origin : " unknown"}
                 </h5>
                 <h5 className="ProductInner__subtitle">
                   <b>Height:</b>
@@ -98,7 +98,7 @@ export function ProductInner() {
                   <b>Temperament: </b>
                   {product.temperament
                     ? product.temperament.toLowerCase()
-                    : ' unknown'}
+                    : " unknown"}
                 </h5>
               </>
             )}

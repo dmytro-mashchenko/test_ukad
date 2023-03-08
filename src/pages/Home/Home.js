@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-import { getPosts } from '../../services/ajax';
-import { Slider } from '../../components/Slider/Slider';
-import { Preloader } from '../../components/Preloader/Preloader';
-import { ErrorMessage } from '../../components/ErrorMesage/ErrorMessage';
+import { getProducts } from "../../services/ajax";
+import { Slider } from "../../components/Slider/Slider";
+import { Preloader } from "../../components/Preloader/Preloader";
+import { ErrorMessage } from "../../components/ErrorMesage/ErrorMessage";
 
-import './Home.scss';
+import "./Home.scss";
 
 export function Home() {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
-  async function loadPosts() {
+  async function loadSliderPosts() {
     try {
-      const data = await getPosts();
+      const data = await getProducts();
       setList(data);
     } catch {
       setIsError(true);
@@ -24,7 +24,7 @@ export function Home() {
   }
 
   useEffect(() => {
-    loadPosts();
+    loadSliderPosts();
   }, []);
 
   return (

@@ -1,3 +1,5 @@
+@import "../../assets/styles/vars.scss";
+
 .SearchField {
   &__form {
     margin-left: auto;
@@ -11,22 +13,22 @@
 
   &__input,
   &__input_instant {
-    font-family: "Poppins";
+    font-family: $base-font-family;
     font-weight: 400;
-    font-size: 19px;
+    font-size: $base-font-size;
     line-height: 28px;
-    color: #fff;
+    color: $color-white;
     background: none;
     border: none;
     outline: none;
     max-width: 195px;
 
     &_instant {
-      color: #232323;
+      color: $color-text-main;
     }
 
     &::placeholder {
-      color: #a8a8a8;
+      color: $color-text-gray;
     }
   }
 

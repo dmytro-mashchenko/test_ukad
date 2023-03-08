@@ -1,16 +1,14 @@
-import React from 'react';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper";
+import PropTypes from "prop-types";
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper';
-import PropTypes from 'prop-types';
+import { Card } from "../Card/Card";
+import { NextButton } from "../NextButton/NextButton";
+import { PrevButton } from "../PrevButton/PrevButton";
 
-import { Card } from '../Card/Card';
-
-import 'swiper/scss';
-import 'swiper/scss/navigation';
-import './Slider.scss';
-import { NextButton } from '../NextButton/NextButton';
-import { PrevButton } from '../PrevButton/PrevButton';
+import "swiper/scss";
+import "swiper/scss/navigation";
+import "./Slider.scss";
 
 export function Slider(props) {
   return (
@@ -22,8 +20,8 @@ export function Slider(props) {
         slidesPerView={3}
         slidesPerGroup={3}
         navigation={{
-          prevEl: '.prev',
-          nextEl: '.next',
+          prevEl: ".prev",
+          nextEl: ".next",
         }}
         breakpoints={{
           992: {

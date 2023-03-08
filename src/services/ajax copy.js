@@ -1,6 +1,6 @@
 const baseApiUrl = "https://api.thedogapi.com/v1";
 
-export async function getProducts(limit = 8, page = 0) {
+export async function getPosts(limit = 8, page = 0) {
   const response = await fetch(
     `${baseApiUrl}/breeds?limit=${limit}&page=${page}`
   );

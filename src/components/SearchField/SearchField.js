@@ -1,8 +1,10 @@
-import { Icon } from "../../assets/icons/icons";
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useDebounce } from "../../services/hooks";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import debounce from "lodash.debounce";
+import PropTypes from "prop-types";
+
+import { Icon } from "../../assets/icons/icons";
+import { useDebounce } from "../../services/hooks";
 
 import "./SearchField.scss";
 
@@ -10,18 +12,18 @@ export function SearchField({ changeProducts }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [value, setValue] = useState(searchParams.get("search") || "");
-  const PATH = window.location.pathname;
-  const PRODUCTS_PATH = PATH === "/products";
+  const LOCATION = useLocation();
+  const LOCATION_PRODUCTS = LOCATION.pathname === "/products";
 
-  const handleChange = (e) => {
+  function handleChange(e) {
     setValue(e.target.value.trim());
-  };
+  }
 
-  const onSubmitHandler = (e) => {
+  function onSubmitHandler(e) {
     e.preventDefault();
-    if (changeProducts) return;
-    if (!PRODUCTS_PATH) navigate(`/products?page=1&search=${value}`);
-  };
+    if (!changeProducts && !LOCATION_PRODUCTS)
+      navigate(`/products?page=1&search=${value}`);
+  }
 
   const debouncedChangeProducts = useDebounce(() => {
     changeProducts(value);
@@ -40,12 +42,12 @@ export function SearchField({ changeProducts }) {
   }, [value]);
 
   useEffect(() => {
-    if (!PRODUCTS_PATH) setValue("");
-  }, [PATH]);
+    if (!LOCATION_PRODUCTS) setValue("");
+  }, [LOCATION]);
 
   return (
     <form onSubmit={onSubmitHandler} className="SearchField__form">
-      {(!PRODUCTS_PATH || changeProducts) && (
+      {(!LOCATION_PRODUCTS || changeProducts) && (
         <div className="SearchField__container">
           <Icon
             className="SearchField__icon"
@@ -57,7 +59,7 @@ export function SearchField({ changeProducts }) {
             onChange={handleChange}
             className={
               changeProducts
-                ? `SearchField__input_instant`
+                ? "SearchField__input_instant"
                 : "SearchField__input"
             }
             type="text"
@@ -69,3 +71,7 @@ export function SearchField({ changeProducts }) {
     </form>
   );
 }
+
+SearchField.propTypes = {
+  changeProducts: PropTypes.func,
+};

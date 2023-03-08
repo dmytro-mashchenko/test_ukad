@@ -20,19 +20,21 @@ export function Products() {
   const [currentPage, setCurrentPage] = useState(
     Number(searchParams.get("page")) || 1
   );
+  const [filteredCurrentPage, setFilteredCurrentPage] = useState(
+    Number(searchParams.get("page")) || 1
+  );
   const productsPerPage = 10;
   const [queryValue, setQueryValue] = useState(
     searchParams.get("search") || ""
   );
-  const [totalProducts, setTotalProducts] = useState([]);
-  const [hasReload, setHasReload] = useState(true);
+  const [totalFilteredProducts, setTotalFilteredProducts] = useState(0);
 
-  async function loadAllProducts() {
+  async function loadProducts() {
     try {
-      const data = await getProducts(170);
-      setTotalProducts(data);
-      setProducts(getVisiblePages(data, productsPerPage, currentPage));
-      hasReload ? setHasReload(false) : setCurrentPage(1);
+      setLoading(true);
+      setProducts([]);
+      const data = await getProducts(productsPerPage, currentPage - 1);
+      setProducts(data);
     } catch {
       setIsError(true);
     } finally {
@@ -43,9 +45,8 @@ export function Products() {
   async function loadFilteredProducts() {
     try {
       const data = await getFilteredProducts(queryValue);
-      setTotalProducts(data);
-      setProducts(getVisiblePages(data, productsPerPage, currentPage));
-      hasReload ? setHasReload(false) : setCurrentPage(1);
+      setTotalFilteredProducts(data.length);
+      setProducts(getVisiblePages(data, productsPerPage, filteredCurrentPage));
     } catch {
       setIsError(true);
     } finally {
@@ -56,17 +57,19 @@ export function Products() {
   useEffect(() => {
     if (!queryValue) {
       searchParams.delete("search");
-      loadAllProducts();
+      searchParams.set("page", currentPage);
+      setSearchParams(searchParams);
+      setFilteredCurrentPage(1);
+      loadProducts();
       return;
     }
-    loadFilteredProducts();
-  }, [queryValue]);
-
-  useEffect(() => {
-    searchParams.set("page", currentPage);
-    setSearchParams(searchParams);
-    setProducts(getVisiblePages(totalProducts, productsPerPage, currentPage));
-  }, [currentPage]);
+    if (queryValue) {
+      searchParams.set("page", filteredCurrentPage);
+      setSearchParams(searchParams);
+      setCurrentPage(1);
+      loadFilteredProducts();
+    }
+  }, [currentPage, filteredCurrentPage, queryValue]);
 
   return (
     <div className="Products">
@@ -81,19 +84,22 @@ export function Products() {
         {isError && <ErrorMessage />}
         {loading && <Preloader />}
         <div className="Products__catalog">
-          {!!products.length &&
+          {products &&
             products.map((item) => (
               <div className="Products__card-wrapper" key={item.id}>
                 <Card {...item}></Card>
               </div>
             ))}
         </div>
-        {!!products.length && (
+        {!queryValue && (
+          <Pagination onPageChange={setCurrentPage} currentPage={currentPage} />
+        )}
+        {queryValue && !!products.length && (
           <Pagination
-            onPageChange={setCurrentPage}
-            currentPage={currentPage}
+            onPageChange={setFilteredCurrentPage}
+            currentPage={filteredCurrentPage}
             productsPerPage={productsPerPage}
-            totalProductsCount={totalProducts.length}
+            totalProducts={totalFilteredProducts}
           />
         )}
       </div>

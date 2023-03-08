@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 
 import "./ErrorMessage.scss";
 
@@ -11,3 +11,7 @@ export function ErrorMessage({
     </div>
   );
 }
+
+ErrorMessage.propTypes = {
+  message: PropTypes.string,
+};

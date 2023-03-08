@@ -1,7 +1,6 @@
-import React from 'react';
-import preloader from '../../assets/img/preloader.gif';
+import preloader from "../../assets/img/preloader.gif";
 
-import './Preloader.scss';
+import "./Preloader.scss";
 
 export function Preloader() {
   return (

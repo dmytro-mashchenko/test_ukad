@@ -11,11 +11,11 @@ export function Pagination({
   onPageChange,
   currentPage,
   productsPerPage,
-  totalProductsCount,
+  totalProducts,
 }) {
   const pageNumbers = useMemo(
-    () => setPageNumbers(totalProductsCount, productsPerPage),
-    [totalProductsCount, productsPerPage]
+    () => (totalProducts ? setPageNumbers(totalProducts, productsPerPage) : 17),
+    [totalProducts, productsPerPage]
   );
 
   function onPaginationClick() {
@@ -51,5 +51,5 @@ Pagination.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   currentPage: PropTypes.number.isRequired,
   productsPerPage: PropTypes.number,
-  totalProductsCount: PropTypes.number,
+  totalProducts: PropTypes.number,
 };
