@@ -8,7 +8,7 @@ import { Preloader } from "../../components/Preloader/Preloader";
 import { getProducts } from "../../services/ajax";
 import { SearchField } from "../../components/SearchField/SearchField";
 import { getFilteredProducts } from "../../services/ajax";
-import { getVisiblePages } from "../../services/functions";
+import { showVisibleProducts } from "../../services/functions";
 
 import "./Products.scss";
 
@@ -17,35 +17,23 @@ export function Products() {
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [currentPage, setCurrentPage] = useState(
-    Number(searchParams.get("page")) || 1
-  );
-  const productsPerPage = 10;
-  const [queryValue, setQueryValue] = useState(
-    searchParams.get("search") || ""
-  );
+  const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
+  const [searchValue, setSearchValue] = useState(searchParams.get("search") || "");
   const [totalProducts, setTotalProducts] = useState([]);
-  const [hasReload, setHasReload] = useState(true);
+  const [hasPageReloaded, setHasPageReloaded] = useState(true);
+  const productsPerPage = 10;
+  const allProductsCount = 170;
 
-  async function loadAllProducts() {
+  async function loadProducts() {
     try {
-      const data = await getProducts(170);
+      setLoading(true);
+      setProducts([]);
+      const data = !searchValue
+        ? await getProducts(allProductsCount)
+        : await getFilteredProducts(searchValue);
       setTotalProducts(data);
-      setProducts(getVisiblePages(data, productsPerPage, currentPage));
-      hasReload ? setHasReload(false) : setCurrentPage(1);
-    } catch {
-      setIsError(true);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function loadFilteredProducts() {
-    try {
-      const data = await getFilteredProducts(queryValue);
-      setTotalProducts(data);
-      setProducts(getVisiblePages(data, productsPerPage, currentPage));
-      hasReload ? setHasReload(false) : setCurrentPage(1);
+      setProducts(showVisibleProducts(data, productsPerPage, currentPage));
+      hasPageReloaded ? setHasPageReloaded(false) : setCurrentPage(1);
     } catch {
       setIsError(true);
     } finally {
@@ -54,18 +42,17 @@ export function Products() {
   }
 
   useEffect(() => {
-    if (!queryValue) {
+    if (!searchValue) {
       searchParams.delete("search");
-      loadAllProducts();
-      return;
+      setSearchParams(searchParams);
     }
-    loadFilteredProducts();
-  }, [queryValue]);
+    loadProducts();
+  }, [searchValue]);
 
   useEffect(() => {
     searchParams.set("page", currentPage);
     setSearchParams(searchParams);
-    setProducts(getVisiblePages(totalProducts, productsPerPage, currentPage));
+    setProducts(showVisibleProducts(totalProducts, productsPerPage, currentPage));
   }, [currentPage]);
 
   return (
@@ -73,9 +60,9 @@ export function Products() {
       <div className="Products__container container">
         <div className="Products__top-row">
           <h2 className="Products__title">Dogs</h2>
-          <SearchField changeProducts={setQueryValue} />
+          <SearchField instantChangeProducts={setSearchValue} />
         </div>
-        {queryValue && !products.length && !loading && (
+        {searchValue && !products.length && !loading && (
           <ErrorMessage message="There are no dogs with this breed" />
         )}
         {isError && <ErrorMessage />}

@@ -12,7 +12,7 @@ export function Home() {
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
-  async function loadSliderPosts() {
+  async function loadSliderProducts() {
     try {
       const data = await getProducts();
       setList(data);
@@ -24,7 +24,7 @@ export function Home() {
   }
 
   useEffect(() => {
-    loadSliderPosts();
+    loadSliderProducts();
   }, []);
 
   return (

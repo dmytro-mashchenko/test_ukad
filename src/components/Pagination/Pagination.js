@@ -3,7 +3,7 @@ import ReactPaginate from "react-paginate";
 import PropTypes from "prop-types";
 
 import { Icon } from "../../assets/icons/icons";
-import { setPageNumbers } from "../../services/functions";
+import { getPageNumbers } from "../../services/functions";
 
 import "./Pagination.scss";
 
@@ -14,7 +14,7 @@ export function Pagination({
   totalProductsCount,
 }) {
   const pageNumbers = useMemo(
-    () => setPageNumbers(totalProductsCount, productsPerPage),
+    () => getPageNumbers(totalProductsCount, productsPerPage),
     [totalProductsCount, productsPerPage]
   );
 

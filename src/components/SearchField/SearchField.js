@@ -8,12 +8,12 @@ import { useDebounce } from "../../services/hooks";
 
 import "./SearchField.scss";
 
-export function SearchField({ changeProducts }) {
+export function SearchField({ instantChangeProducts }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [value, setValue] = useState(searchParams.get("search") || "");
-  const LOCATION = useLocation();
-  const LOCATION_PRODUCTS = LOCATION.pathname === "/products";
+  const location = useLocation();
+  const productsLocation = location.pathname === "/products";
 
   function handleChange(e) {
     setValue(e.target.value.trim());
@@ -21,20 +21,20 @@ export function SearchField({ changeProducts }) {
 
   function onSubmitHandler(e) {
     e.preventDefault();
-    if (!changeProducts && !LOCATION_PRODUCTS)
+    if (!instantChangeProducts && !productsLocation)
       navigate(`/products?page=1&search=${value}`);
   }
 
   const debouncedChangeProducts = useDebounce(() => {
-    changeProducts(value);
+    instantChangeProducts(value);
   });
 
   useEffect(() => {
-    if (!changeProducts) return;
+    if (!instantChangeProducts) return;
     searchParams.set("search", value);
     setSearchParams(searchParams);
     if (!value) {
-      changeProducts(value);
+      instantChangeProducts(value);
       debouncedChangeProducts.cancel();
       return;
     }
@@ -42,25 +42,23 @@ export function SearchField({ changeProducts }) {
   }, [value]);
 
   useEffect(() => {
-    if (!LOCATION_PRODUCTS) setValue("");
-  }, [LOCATION]);
+    if (!productsLocation) setValue("");
+  }, [location]);
 
   return (
     <form onSubmit={onSubmitHandler} className="SearchField__form">
-      {(!LOCATION_PRODUCTS || changeProducts) && (
+      {(!productsLocation || instantChangeProducts) && (
         <div className="SearchField__container">
           <Icon
             className="SearchField__icon"
             icon="search"
             size={22}
-            color={changeProducts ? "#757575" : "#fff"}
+            color={instantChangeProducts ? "#757575" : "#fff"}
           />
           <input
             onChange={handleChange}
             className={
-              changeProducts
-                ? "SearchField__input_instant"
-                : "SearchField__input"
+              instantChangeProducts ? "SearchField__input_instant" : "SearchField__input"
             }
             type="text"
             value={value}
