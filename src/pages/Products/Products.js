@@ -62,25 +62,25 @@ export function Products() {
           <h2 className="Products__title">Dogs</h2>
           <SearchField instantChangeProducts={setSearchValue} />
         </div>
-        {searchValue && !products.length && !loading && !isError && (
+        {searchValue && !products?.length <= 0 && !loading && !isError && (
           <ErrorMessage message="There are no dogs with this breed" />
         )}
         {isError && <ErrorMessage />}
         {loading && <Preloader />}
         <div className="Products__catalog">
-          {!!products.length &&
+          {products?.length > 0 &&
             products.map((item) => (
               <div className="Products__card-wrapper" key={item.id}>
                 <Card {...item}></Card>
               </div>
             ))}
         </div>
-        {!!products.length && (
+        {products?.length > 0 && (
           <Pagination
             onPageChange={setCurrentPage}
             currentPage={currentPage}
-            productsPerPage={productsPerPage}
-            totalProductsCount={totalProducts.length}
+            itemsPerPage={productsPerPage}
+            totalItemsCount={totalProducts.length}
           />
         )}
       </div>

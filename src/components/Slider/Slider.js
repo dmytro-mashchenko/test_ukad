@@ -42,7 +42,7 @@ export function Slider(props) {
       >
         {props.list.map((item) => (
           <SwiperSlide className="Slider__slide" key={item.id}>
-            <Card mode="primary" {...item}></Card>
+            <Card mode="slider" {...item}></Card>
           </SwiperSlide>
         ))}
       </Swiper>

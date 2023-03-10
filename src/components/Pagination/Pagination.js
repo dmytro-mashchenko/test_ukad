@@ -7,15 +7,10 @@ import { getPageNumbers } from "../../services/functions";
 
 import "./Pagination.scss";
 
-export function Pagination({
-  onPageChange,
-  currentPage,
-  productsPerPage,
-  totalProductsCount,
-}) {
+export function Pagination({ onPageChange, currentPage, itemsPerPage, totalItemsCount }) {
   const pageNumbers = useMemo(
-    () => getPageNumbers(totalProductsCount, productsPerPage),
-    [totalProductsCount, productsPerPage]
+    () => getPageNumbers(totalItemsCount, itemsPerPage),
+    [totalItemsCount, itemsPerPage]
   );
 
   function onPaginationClick() {
@@ -50,6 +45,6 @@ export function Pagination({
 Pagination.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   currentPage: PropTypes.number.isRequired,
-  productsPerPage: PropTypes.number,
-  totalProductsCount: PropTypes.number,
+  itemsPerPage: PropTypes.number,
+  totalItemsCount: PropTypes.number,
 };

@@ -33,7 +33,7 @@ export function Home() {
         <h2 className="Home__title">Home page</h2>
         {isError && <ErrorMessage />}
         {loading && <Preloader />}
-        {list && <Slider list={list} />}
+        {list?.length > 0 && <Slider list={list} />}
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import "./Card.scss";
 
 export function Card({ image, name, temperament, className, mode, id }) {
   const cardMode = cn({
-    "Slider-format": mode === "primary",
+    "Slider-format": mode === "slider",
   });
 
   return (
@@ -33,10 +33,15 @@ export function Card({ image, name, temperament, className, mode, id }) {
 }
 
 Card.propTypes = {
-  image: PropTypes.object,
+  image: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+    id: PropTypes.string,
+    width: PropTypes.number,
+    height: PropTypes.number,
+  }),
   name: PropTypes.string.isRequired,
   temperament: PropTypes.string,
   className: PropTypes.string,
-  mode: PropTypes.oneOf(["default", "primary"]),
+  mode: PropTypes.oneOf(["default", "slider"]),
   id: PropTypes.number.isRequired,
 };
