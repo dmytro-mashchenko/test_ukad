@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams,
+  useLocation,
+  createSearchParams,
+} from "react-router-dom";
 import debounce from "lodash.debounce";
 import PropTypes from "prop-types";
 
@@ -22,7 +27,10 @@ export function SearchField({ instantChangeProducts }) {
   function onSubmitHandler(e) {
     e.preventDefault();
     if (!instantChangeProducts && !productsLocation)
-      navigate(`/products?page=1&search=${value}`);
+      navigate({
+        pathname: "/products",
+        search: `?${createSearchParams({ page: 1, search: value })}`,
+      });
   }
 
   const debouncedChangeProducts = useDebounce(() => {

@@ -62,7 +62,7 @@ export function Products() {
           <h2 className="Products__title">Dogs</h2>
           <SearchField instantChangeProducts={setSearchValue} />
         </div>
-        {searchValue && !products.length && !loading && (
+        {searchValue && !products.length && !loading && !isError && (
           <ErrorMessage message="There are no dogs with this breed" />
         )}
         {isError && <ErrorMessage />}
