@@ -1,16 +1,18 @@
+@import "../../assets/styles/vars.scss";
+
 .Footer {
-    background: #022B32;
+  background: $color-main;
 
-    &__container {
-        padding-top: 27px;
-        padding-bottom: 27px;
-    }
+  &__container {
+    padding-top: 27px;
+    padding-bottom: 27px;
+  }
 
-    &__copyright-note {
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 24px;
-        text-transform: uppercase;
-        color: #FFFFFF;
-    }
+  &__copyright-note {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-transform: uppercase;
+    color: $color-white;
+  }
 }

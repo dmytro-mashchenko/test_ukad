@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { getProductDetails, getProductImage } from '../../services/ajax';
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import { Preloader } from '../../components/Preloader/Preloader';
-import { ErrorMessage } from '../../components/ErrorMesage/ErrorMessage';
+import { getProductDetails, getProductImage } from "../../services/ajax";
+import { Preloader } from "../../components/Preloader/Preloader";
+import { ErrorMessage } from "../../components/ErrorMesage/ErrorMessage";
+import placeHolderImage from "../../assets/img/placeholder.jpg";
 
-import './ProductInner.scss';
+import "./ProductInner.scss";
 
 export function ProductInner() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [productImageUrl, setPdouctImageUrl] = useState('');
+  const [productImageUrl, setPdouctImageUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [isImgError, setIsImgError] = useState(false);
 
   async function loadProductDetails() {
     try {
@@ -32,7 +34,7 @@ export function ProductInner() {
       const data = await getProductImage(id);
       setPdouctImageUrl(data.url);
     } catch {
-      setIsError(true);
+      setIsImgError(true);
     } finally {
       setLoading(false);
     }
@@ -50,6 +52,9 @@ export function ProductInner() {
     <div className="ProductInner">
       {loading && <Preloader />}
       {isError && <ErrorMessage />}
+      {isImgError && (
+        <ErrorMessage message="There is not image of this dog, but it will be there soon" />
+      )}
       <div className="container">
         <div className="ProductInner__link-container">
           {productImageUrl && (
@@ -60,10 +65,10 @@ export function ProductInner() {
         </div>
         <div className="ProductInner__content">
           <div className="ProductInner__image-container">
-            {productImageUrl && (
+            {product && (
               <img
                 className="ProductInner__image"
-                src={productImageUrl}
+                src={productImageUrl ? productImageUrl : placeHolderImage}
                 alt="fine_dog"
               />
             )}
@@ -74,13 +79,11 @@ export function ProductInner() {
                 <h2 className="ProductInner__title">{product.name}</h2>
                 <h5 className="ProductInner__subtitle">
                   <b>Bred for: </b>
-                  {product.bred_for
-                    ? product.bred_for.toLowerCase()
-                    : ' unknown'}
+                  {product.bred_for ? product.bred_for.toLowerCase() : " unknown"}
                 </h5>
                 <h5 className="ProductInner__subtitle">
                   <b>Country origin:</b>
-                  {product.origin ? product.origin : ' unknown'}
+                  {product.origin ? product.origin : " unknown"}
                 </h5>
                 <h5 className="ProductInner__subtitle">
                   <b>Height:</b>
@@ -96,9 +99,7 @@ export function ProductInner() {
                 </h5>
                 <h5 className="ProductInner__subtitle">
                   <b>Temperament: </b>
-                  {product.temperament
-                    ? product.temperament.toLowerCase()
-                    : ' unknown'}
+                  {product.temperament ? product.temperament.toLowerCase() : " unknown"}
                 </h5>
               </>
             )}

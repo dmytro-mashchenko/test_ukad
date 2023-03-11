@@ -1,13 +1,17 @@
-import React from 'react';
+import PropTypes from "prop-types";
 
-import './ErrorMessage.scss';
+import "./ErrorMessage.scss";
 
-export function ErrorMessage() {
+export function ErrorMessage({
+  message = "Something went wrong, please try again later",
+}) {
   return (
     <div className="ErrorMessage">
-      <p className="ErrorMessage__message">
-        Something went wrong, please try again later
-      </p>
+      <p className="ErrorMessage__message">{message}</p>
     </div>
   );
 }
+
+ErrorMessage.propTypes = {
+  message: PropTypes.string,
+};

@@ -1,29 +1,31 @@
+@import "../../assets/styles/vars.scss";
+
 .Header {
-    background:#022B32;
+  background: $color-main;
 
-    &__container {
-        display: flex;
-        align-items: center;
-        padding-top: 24px;
-        padding-bottom: 20px;
+  &__container {
+    display: flex;
+    align-items: center;
+    padding-top: 24px;
+    padding-bottom: 20px;
+  }
+
+  &__logo {
+    width: 110px;
+    height: 27px;
+    margin-right: 55px;
+  }
+
+  &__link {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-transform: uppercase;
+    color: $color-white;
+    margin-right: 55px;
+
+    &.active {
+      text-decoration: underline;
     }
-
-    &__logo {
-        width: 110px;
-        height: 27.3px;
-        margin-right: 55px;
-    }
-
-    &__link {
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 24px;
-        text-transform: uppercase;
-        color: #FFFFFF;
-        margin-right: 55px;
-
-        &.active {
-            text-decoration: underline;
-        } 
-    }
+  }
 }
