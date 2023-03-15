@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { Card } from "../../components/Card/Card";
@@ -18,22 +18,39 @@ export function Products() {
   const [isError, setIsError] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
+  const [filteredCurrentPage, setFilteredCurrentPage] = useState(
+    Number(searchParams.get("page")) || 1
+  );
   const [searchValue, setSearchValue] = useState(searchParams.get("search") || "");
-  const [totalProducts, setTotalProducts] = useState([]);
-  const [hasPageReloaded, setHasPageReloaded] = useState(true);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const productsPerPage = 10;
-  const allProductsCount = 170;
+  const [hasPageReloaded, setHasPageReloaded] = useState(true);
 
   async function loadProducts() {
     try {
       setLoading(true);
       setProducts([]);
-      const data = !searchValue
-        ? await getProducts(allProductsCount)
-        : await getFilteredProducts(searchValue);
-      setTotalProducts(data);
-      setProducts(showVisibleProducts(data, productsPerPage, currentPage));
-      hasPageReloaded ? setHasPageReloaded(false) : setCurrentPage(1);
+      searchParams.delete("search");
+      setSearchParams(searchParams);
+      const data = await getProducts(productsPerPage, currentPage - 1);
+      setProducts(data);
+      setFilteredProducts([]);
+    } catch {
+      setIsError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function loadFilteredProducts() {
+    try {
+      setLoading(true);
+      setProducts([]);
+      setCurrentPage(1);
+      const data = await getFilteredProducts(searchValue);
+      setProducts(showVisibleProducts(data, productsPerPage, filteredCurrentPage));
+      setFilteredProducts(data);
+      hasPageReloaded ? setHasPageReloaded(false) : setFilteredCurrentPage(1);
     } catch {
       setIsError(true);
     } finally {
@@ -43,17 +60,25 @@ export function Products() {
 
   useEffect(() => {
     if (!searchValue) {
-      searchParams.delete("search");
+      searchParams.set("page", currentPage);
       setSearchParams(searchParams);
+      loadProducts();
+      return;
     }
-    loadProducts();
-  }, [searchValue]);
+    if (searchValue) {
+      searchParams.set("page", filteredCurrentPage);
+      setSearchParams(searchParams);
+      loadFilteredProducts();
+    }
+  }, [searchValue, currentPage]);
 
   useEffect(() => {
-    searchParams.set("page", currentPage);
+    searchParams.set("page", filteredCurrentPage);
     setSearchParams(searchParams);
-    setProducts(showVisibleProducts(totalProducts, productsPerPage, currentPage));
-  }, [currentPage]);
+    setProducts(
+      showVisibleProducts(filteredProducts, productsPerPage, filteredCurrentPage)
+    );
+  }, [filteredCurrentPage]);
 
   return (
     <div className="Products">
@@ -77,10 +102,10 @@ export function Products() {
         </div>
         {products?.length > 0 && (
           <Pagination
-            onPageChange={setCurrentPage}
-            currentPage={currentPage}
+            onPageChange={!searchValue ? setCurrentPage : setFilteredCurrentPage}
+            currentPage={!searchValue ? currentPage : filteredCurrentPage}
             itemsPerPage={productsPerPage}
-            totalItemsCount={totalProducts.length}
+            totalItemsCount={filteredProducts.length}
           />
         )}
       </div>
