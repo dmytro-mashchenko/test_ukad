@@ -9,7 +9,7 @@ import "./Pagination.scss";
 
 export function Pagination({ onPageChange, currentPage, itemsPerPage, totalItemsCount }) {
   const pageNumbers = useMemo(
-    () => getPageNumbers(totalItemsCount, itemsPerPage),
+    () => (totalItemsCount ? getPageNumbers(totalItemsCount, itemsPerPage) : 17),
     [totalItemsCount, itemsPerPage]
   );
 
