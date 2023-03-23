@@ -9,7 +9,7 @@ import debounce from "lodash.debounce";
 import PropTypes from "prop-types";
 
 import { Icon } from "../../assets/icons/icons";
-import { useDebounce } from "../../services/hooks";
+import { useDebounce } from "../../hooks/useDebounce";
 
 import "./SearchField.scss";
 
@@ -39,13 +39,18 @@ export function SearchField({ instantChangeProducts }) {
 
   useEffect(() => {
     if (!instantChangeProducts) return;
-    searchParams.set("search", value);
-    setSearchParams(searchParams);
-    if (!value) {
+
+    if (value) {
+      searchParams.set("search", value);
+      setSearchParams(searchParams);
+    } else {
+      searchParams.delete("search");
+      setSearchParams(searchParams);
       instantChangeProducts(value);
       debouncedChangeProducts.cancel();
       return;
     }
+
     debouncedChangeProducts();
   }, [value]);
 
@@ -54,12 +59,12 @@ export function SearchField({ instantChangeProducts }) {
   }, [location]);
 
   return (
-    <form onSubmit={onSubmitHandler} className="SearchField__form">
+    <form onSubmit={onSubmitHandler} className='SearchField__form'>
       {(!productsLocation || instantChangeProducts) && (
-        <div className="SearchField__container">
+        <div className='SearchField__container'>
           <Icon
-            className="SearchField__icon"
-            icon="search"
+            className='SearchField__icon'
+            icon='search'
             size={22}
             color={instantChangeProducts ? "#757575" : "#fff"}
           />
@@ -68,9 +73,9 @@ export function SearchField({ instantChangeProducts }) {
             className={
               instantChangeProducts ? "SearchField__input_instant" : "SearchField__input"
             }
-            type="text"
+            type='text'
             value={value}
-            placeholder="Search for products"
+            placeholder='Search for products'
           />
         </div>
       )}

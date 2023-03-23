@@ -9,6 +9,7 @@ import { getProducts } from "../../services/ajax";
 import { SearchField } from "../../components/SearchField/SearchField";
 import { getFilteredProducts } from "../../services/ajax";
 import { showVisibleProducts } from "../../services/functions";
+import { useDidUpdate } from "../../hooks/useDidUpdate";
 
 import "./Products.scss";
 
@@ -19,21 +20,32 @@ export function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
   const [searchValue, setSearchValue] = useState(searchParams.get("search") || "");
-  const [totalProducts, setTotalProducts] = useState([]);
-  const [hasPageReloaded, setHasPageReloaded] = useState(true);
+  const [totalFilteredProducts, setTotalFilteredProducts] = useState([]);
   const productsPerPage = 10;
-  const allProductsCount = 170;
 
   async function loadProducts() {
     try {
       setLoading(true);
       setProducts([]);
-      const data = !searchValue
-        ? await getProducts(allProductsCount)
-        : await getFilteredProducts(searchValue);
-      setTotalProducts(data);
+
+      const data = await getProducts(productsPerPage, currentPage - 1);
+      setProducts(data);
+      setTotalFilteredProducts([]);
+    } catch {
+      setIsError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function loadFilteredProducts() {
+    try {
+      setLoading(true);
+      setProducts([]);
+
+      const data = await getFilteredProducts(searchValue);
+      setTotalFilteredProducts(data);
       setProducts(showVisibleProducts(data, productsPerPage, currentPage));
-      hasPageReloaded ? setHasPageReloaded(false) : setCurrentPage(1);
     } catch {
       setIsError(true);
     } finally {
@@ -42,35 +54,47 @@ export function Products() {
   }
 
   useEffect(() => {
-    if (!searchValue) {
-      searchParams.delete("search");
-      setSearchParams(searchParams);
+    !searchValue ? loadProducts() : loadFilteredProducts();
+  }, []);
+
+  useDidUpdate(() => {
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    } else {
+      !searchValue ? loadProducts() : loadFilteredProducts();
     }
-    loadProducts();
   }, [searchValue]);
 
-  useEffect(() => {
+  useDidUpdate(() => {
     searchParams.set("page", currentPage);
     setSearchParams(searchParams);
-    setProducts(showVisibleProducts(totalProducts, productsPerPage, currentPage));
+    if (!searchValue) {
+      loadProducts();
+    } else if (searchValue && currentPage === 1) {
+      loadFilteredProducts();
+    } else {
+      setProducts(
+        showVisibleProducts(totalFilteredProducts, productsPerPage, currentPage)
+      );
+    }
   }, [currentPage]);
 
   return (
-    <div className="Products">
-      <div className="Products__container container">
-        <div className="Products__top-row">
-          <h2 className="Products__title">Dogs</h2>
+    <div className='Products'>
+      <div className='Products__container container'>
+        <div className='Products__top-row'>
+          <h2 className='Products__title'>Dogs</h2>
           <SearchField instantChangeProducts={setSearchValue} />
         </div>
         {searchValue && products?.length <= 0 && !loading && !isError && (
-          <ErrorMessage message="There are no dogs with this breed" />
+          <ErrorMessage message='There are no dogs with this breed' />
         )}
         {isError && <ErrorMessage />}
         {loading && <Preloader />}
-        <div className="Products__catalog">
+        <div className='Products__catalog'>
           {products?.length > 0 &&
             products.map((item) => (
-              <div className="Products__card-wrapper" key={item.id}>
+              <div className='Products__card-wrapper' key={item.id}>
                 <Card {...item}></Card>
               </div>
             ))}
@@ -80,7 +104,7 @@ export function Products() {
             onPageChange={setCurrentPage}
             currentPage={currentPage}
             itemsPerPage={productsPerPage}
-            totalItemsCount={totalProducts.length}
+            totalItemsCount={totalFilteredProducts.length}
           />
         )}
       </div>
