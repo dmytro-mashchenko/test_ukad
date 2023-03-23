@@ -1,27 +1,32 @@
-import { useMemo } from "react";
-import ReactPaginate from "react-paginate";
-import PropTypes from "prop-types";
+import { useMemo } from 'react';
+import ReactPaginate from 'react-paginate';
+import PropTypes from 'prop-types';
 
-import { Icon } from "../../assets/icons/icons";
-import { getPageNumbers } from "../../services/functions";
+import { Icon } from '../../assets/icons/icons';
+import { getPageNumbers } from '../../services/functions';
 
-import "./Pagination.scss";
+import './Pagination.scss';
 
-export function Pagination({ onPageChange, currentPage, itemsPerPage, totalItemsCount }) {
+export function Pagination({
+  onPageChange,
+  currentPage,
+  itemsPerPage,
+  totalItemsCount,
+}) {
   const pageNumbers = useMemo(
-    () => (totalItemsCount ? getPageNumbers(totalItemsCount, itemsPerPage) : 17),
+    () => getPageNumbers(totalItemsCount, itemsPerPage),
     [totalItemsCount, itemsPerPage]
   );
 
   function onPaginationClick() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   return (
     <ReactPaginate
       breakLabel='...'
-      nextLabel={<Icon icon='chevron-right' size={35} color={"#757575"} />}
-      previousLabel={<Icon icon='chevron-right' size={35} color={"#757575"} />}
+      nextLabel={<Icon icon='chevron-right' size={35} color={'#757575'} />}
+      previousLabel={<Icon icon='chevron-right' size={35} color={'#757575'} />}
       onPageChange={(e) => onPageChange(e.selected + 1)}
       pageRangeDisplayed={3}
       pageCount={pageNumbers}

@@ -1,25 +1,29 @@
-import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-import { Card } from "../../components/Card/Card";
-import { ErrorMessage } from "../../components/ErrorMesage/ErrorMessage";
-import { Pagination } from "../../components/Pagination/Pagination";
-import { Preloader } from "../../components/Preloader/Preloader";
-import { getProducts } from "../../services/ajax";
-import { SearchField } from "../../components/SearchField/SearchField";
-import { getFilteredProducts } from "../../services/ajax";
-import { showVisibleProducts } from "../../services/functions";
-import { useDidUpdate } from "../../hooks/useDidUpdate";
+import { Card } from '../../components/Card/Card';
+import { ErrorMessage } from '../../components/ErrorMesage/ErrorMessage';
+import { Pagination } from '../../components/Pagination/Pagination';
+import { Preloader } from '../../components/Preloader/Preloader';
+import { getProducts } from '../../services/ajax';
+import { SearchField } from '../../components/SearchField/SearchField';
+import { getFilteredProducts } from '../../services/ajax';
+import { showVisibleProducts } from '../../services/functions';
+import { useDidUpdate } from '../../hooks/useDidUpdate';
 
-import "./Products.scss";
+import './Products.scss';
 
 export function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
-  const [searchValue, setSearchValue] = useState(searchParams.get("search") || "");
+  const [currentPage, setCurrentPage] = useState(
+    Number(searchParams.get('page')) || 1
+  );
+  const [searchValue, setSearchValue] = useState(
+    searchParams.get('search') || ''
+  );
   const [totalFilteredProducts, setTotalFilteredProducts] = useState([]);
   const productsPerPage = 10;
 
@@ -66,7 +70,7 @@ export function Products() {
   }, [searchValue]);
 
   useDidUpdate(() => {
-    searchParams.set("page", currentPage);
+    searchParams.set('page', currentPage);
     setSearchParams(searchParams);
     if (!searchValue) {
       loadProducts();
@@ -104,7 +108,11 @@ export function Products() {
             onPageChange={setCurrentPage}
             currentPage={currentPage}
             itemsPerPage={productsPerPage}
-            totalItemsCount={totalFilteredProducts.length}
+            totalItemsCount={
+              totalFilteredProducts.length > 0
+                ? totalFilteredProducts.length
+                : 170
+            }
           />
         )}
       </div>
